@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>2-User Chat with Screenshot</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #101820;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    h2 {
+      color: #00c2cb;
+    }
+    .chat-container {
+      width: 100%;
+      max-width: 600px;
+      background: #1b2a41;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    }
+    .top-bar {
+      padding: 10px;
+      background: #23395d;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    select {
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+    }
+    .chat-box {
+      height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+      background: #132030;
+    }
+    .message {
+      margin: 6px 0;
+      padding: 10px 15px;
+      border-radius: 20px;
+      max-width: 75%;
+      display: inline-block;
+      clear: both;
+    }
+    .user1 {
+      background: #007bff;
+      align-self: flex-start;
+      float: left;
+    }
+    .user2 {
+      background: #28a745;
+      align-self: flex-end;
+      float: right;
+    }
+    .input-area {
+      display: flex;
+      padding: 10px;
+      background: #23395d;
+    }
+    .input-area input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 20px;
+      border: none;
+      font-size: 16px;
+    }
+    .input-area button {
+      padding: 10px 20px;
+      margin-left: 10px;
+      border: none;
+      border-radius: 20px;
+      background: #00c2cb;
+      color: white;
+      cursor: pointer;
+    }
+    .gallery {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .gallery img {
+      width: 100px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px #000;
+    }
+  </style>
+</head>
+<body>
+  <h2>Private 2-User Chat</h2>
+  <div class="chat-container">
+    <div class="top-bar">
+      <label for="userSelect">You are:</label>
+      <select id="userSelect">
+        <option value="user1">User 1</option>
+        <option value="user2">User 2</option>
+      </select>
+    </div>
+    <div id="chat-box" class="chat-box"></div>
+    <div class="input-area">
+      <input type="text" id="msgInput" placeholder="Type your message..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <h3>Screenshot Gallery</h3>
+  <div class="gallery" id="gallery"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script>
+    function sendMessage() {
+      const input = document.getElementById("msgInput");
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      const chatBox = document.getElementById("chat-box");
+      const user = document.getElementById("userSelect").value;
+
+      const msgDiv = document.createElement("div");
+      msgDiv.className = "message " + user;
+      msgDiv.textContent = msg;
+      chatBox.appendChild(msgDiv);
+      input.value = "";
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      if (chatBox.scrollHeight > chatBox.clientHeight + 10) {
+        html2canvas(chatBox).then(canvas => {
+          const img = document.createElement("img");
+          img.src = canvas.toDataURL();
+          document.getElementById("gallery").appendChild(img);
+        });
+      }
+    }
+  </script>
+</body>
+</html>
